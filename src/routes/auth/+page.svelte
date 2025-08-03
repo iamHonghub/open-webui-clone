@@ -134,7 +134,7 @@
 				};
 
 				darkImage.onerror = () => {
-					logo.style.filter = 'invert(1)'; // Invert image if favicon-dark.png is missing
+					logo.style.filter = 'invert(0)'; // Invert image if favicon-dark.png is missing
 				};
 			}
 		}
@@ -173,17 +173,22 @@
 />
 
 <div class="w-full h-screen max-h-[100dvh] text-white relative" id="auth-page">
-	<div class="w-full h-full absolute top-0 left-0 bg-white dark:bg-black"></div>
+    <!-- Background overlay becomes transparent since the page background is handled via CSS variables -->
+    <div class="w-full h-full absolute top-0 left-0 bg-transparent"></div>
+
+    <!-- Futuristic accent lines behind the content -->
+    <div class="accent-line"></div>
+    <div class="accent-line"></div>
 
 	<div class="w-full absolute top-0 left-0 right-0 h-8 drag-region" />
 
 	{#if loaded}
 		
 
-		<div
-			class="fixed bg-transparent min-h-screen w-full flex justify-center font-primary z-50 text-black dark:text-white"
-			id="auth-container"
-		>
+        <div
+            class="fixed min-h-screen w-full flex items-center justify-center font-primary z-50 text-white"
+            id="auth-container"
+        >
 			<div class="w-full px-10 min-h-screen flex flex-col text-center">
 				{#if ($config?.features.auth_trusted_header ?? false) || $config?.features.auth === false}
 					<div class=" my-auto pb-10 w-full sm:max-w-md">
@@ -201,14 +206,16 @@
 					</div>
 				{:else}
 					<div class="my-auto flex flex-col justify-center items-center">
-						<div class=" sm:max-w-md my-auto pb-10 w-full dark:text-gray-100">
-							<form
-								class=" flex flex-col justify-center"
-								on:submit={(e) => {
-									e.preventDefault();
-									submitHandler();
-								}}
-							>
+                        <div class="glass-card sm:max-w-md my-auto pb-10 w-full text-white">
+                            <!-- Brand logo placed at the top of the card -->
+                            <img src="/441049.png" alt="AI QuintX Logo" class="mx-auto mb-6 w-40" />
+                            <form
+                                class="flex flex-col justify-center"
+                                on:submit={(e) => {
+                                    e.preventDefault();
+                                    submitHandler();
+                                }}
+                            >
 								<div class="mb-1">
 									<div class=" text-2xl font-medium">
 										{#if $config?.onboarding ?? false}
@@ -239,15 +246,15 @@
 												<label for="name" class="text-sm font-medium text-left mb-1 block"
 													>{$i18n.t('Name')}</label
 												>
-												<input
-													bind:value={name}
-													type="text"
-													id="name"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent"
-													autocomplete="name"
-													placeholder={$i18n.t('Enter Your Full Name')}
-													required
-												/>
+                                                <input
+                                                    bind:value={name}
+                                                    type="text"
+                                                    id="name"
+                                                    class="input-field text-sm"
+                                                    autocomplete="name"
+                                                    placeholder={$i18n.t('Enter Your Full Name')}
+                                                    required
+                                                />
 											</div>
 										{/if}
 
@@ -256,32 +263,32 @@
 												<label for="username" class="text-sm font-medium text-left mb-1 block"
 													>{$i18n.t('Username')}</label
 												>
-												<input
-													bind:value={ldapUsername}
-													type="text"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent"
-													autocomplete="username"
-													name="username"
-													id="username"
-													placeholder={$i18n.t('Enter Your Username')}
-													required
-												/>
+                                                <input
+                                                    bind:value={ldapUsername}
+                                                    type="text"
+                                                    class="input-field text-sm"
+                                                    autocomplete="username"
+                                                    name="username"
+                                                    id="username"
+                                                    placeholder={$i18n.t('Enter Your Username')}
+                                                    required
+                                                />
 											</div>
 										{:else}
 											<div class="mb-2">
 												<label for="email" class="text-sm font-medium text-left mb-1 block"
 													>{$i18n.t('Email')}</label
 												>
-												<input
-													bind:value={email}
-													type="email"
-													id="email"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent"
-													autocomplete="email"
-													name="email"
-													placeholder={$i18n.t('Enter Your Email')}
-													required
-												/>
+                                                <input
+                                                    bind:value={email}
+                                                    type="email"
+                                                    id="email"
+                                                    class="input-field text-sm"
+                                                    autocomplete="email"
+                                                    name="email"
+                                                    placeholder={$i18n.t('Enter Your Email')}
+                                                    required
+                                                />
 											</div>
 										{/if}
 
@@ -289,39 +296,39 @@
 											<label for="password" class="text-sm font-medium text-left mb-1 block"
 												>{$i18n.t('Password')}</label
 											>
-											<input
-												bind:value={password}
-												type="password"
-												id="password"
-												class="my-0.5 w-full text-sm outline-hidden bg-transparent"
-												placeholder={$i18n.t('Enter Your Password')}
-												autocomplete={mode === 'signup' ? 'new-password' : 'current-password'}
-												name="password"
-												required
-											/>
+                                            <input
+                                                bind:value={password}
+                                                type="password"
+                                                id="password"
+                                                class="input-field text-sm"
+                                                placeholder={$i18n.t('Enter Your Password')}
+                                                autocomplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                                                name="password"
+                                                required
+                                            />
 										</div>
 									</div>
 								{/if}
 								<div class="mt-5">
 									{#if $config?.features.enable_login_form || $config?.features.enable_ldap}
-										{#if mode === 'ldap'}
-											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-												type="submit"
-											>
-												{$i18n.t('Authenticate')}
-											</button>
-										{:else}
-											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-												type="submit"
-											>
-												{mode === 'signin'
-													? $i18n.t('Sign in')
-													: ($config?.onboarding ?? false)
-														? $i18n.t('Create Admin Account')
-														: $i18n.t('Create Account')}
-											</button>
+                                        {#if mode === 'ldap'}
+                                            <button
+                                                class="btn-primary w-full"
+                                                type="submit"
+                                            >
+                                                {$i18n.t('Authenticate')}
+                                            </button>
+                                        {:else}
+                                            <button
+                                                class="btn-primary w-full"
+                                                type="submit"
+                                            >
+                                                {mode === 'signin'
+                                                    ? $i18n.t('Sign in')
+                                                    : ($config?.onboarding ?? false)
+                                                        ? $i18n.t('Create Admin Account')
+                                                        : $i18n.t('Create Account')}
+                                            </button>
 
 											{#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
 												<div class=" mt-4 text-sm text-center">
@@ -329,19 +336,19 @@
 														? $i18n.t("Don't have an account?")
 														: $i18n.t('Already have an account?')}
 
-													<button
-														class=" font-medium underline"
-														type="button"
-														on:click={() => {
-															if (mode === 'signin') {
-																mode = 'signup';
-															} else {
-																mode = 'signin';
-															}
-														}}
-													>
-														{mode === 'signin' ? $i18n.t('Sign up') : $i18n.t('Sign in')}
-													</button>
+                                                    <button
+                                                        class="font-medium toggle-link"
+                                                        type="button"
+                                                        on:click={() => {
+                                                            if (mode === 'signin') {
+                                                                mode = 'signup';
+                                                            } else {
+                                                                mode = 'signin';
+                                                            }
+                                                        }}
+                                                    >
+                                                        {mode === 'signin' ? $i18n.t('Sign up') : $i18n.t('Sign in')}
+                                                    </button>
 												</div>
 											{/if}
 										{/if}
@@ -350,25 +357,21 @@
 							</form>
 
 							{#if Object.keys($config?.oauth?.providers ?? {}).length > 0}
-								<div class="inline-flex items-center justify-center w-full">
-									<hr class="w-32 h-px my-4 border-0 dark:bg-gray-100/10 bg-gray-700/10" />
-									{#if $config?.features.enable_login_form || $config?.features.enable_ldap}
-										<span
-											class="px-3 text-sm font-medium text-gray-900 dark:text-white bg-transparent"
-											>{$i18n.t('or')}</span
-										>
-									{/if}
-
-									<hr class="w-32 h-px my-4 border-0 dark:bg-gray-100/10 bg-gray-700/10" />
-								</div>
+                                <div class="inline-flex items-center justify-center w-full">
+                                    <hr class="divider" />
+                                    {#if $config?.features.enable_login_form || $config?.features.enable_ldap}
+                                        <span class="px-3 text-sm font-medium text-white">{$i18n.t('or')}</span>
+                                    {/if}
+                                    <hr class="divider" />
+                                </div>
 								<div class="flex flex-col space-y-2">
-									{#if $config?.oauth?.providers?.google}
-										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-											on:click={() => {
-												window.location.href = `${WEBUI_BASE_URL}/oauth/google/login`;
-											}}
-										>
+                                    {#if $config?.oauth?.providers?.google}
+                                        <button
+                                            class="oauth-button w-full"
+                                            on:click={() => {
+                                                window.location.href = `${WEBUI_BASE_URL}/oauth/google/login`;
+                                            }}
+                                        >
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 48 48"
@@ -391,13 +394,13 @@
 											<span>{$i18n.t('Continue with {{provider}}', { provider: 'Google' })}</span>
 										</button>
 									{/if}
-									{#if $config?.oauth?.providers?.microsoft}
-										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-											on:click={() => {
-												window.location.href = `${WEBUI_BASE_URL}/oauth/microsoft/login`;
-											}}
-										>
+                                    {#if $config?.oauth?.providers?.microsoft}
+                                        <button
+                                            class="oauth-button w-full"
+                                            on:click={() => {
+                                                window.location.href = `${WEBUI_BASE_URL}/oauth/microsoft/login`;
+                                            }}
+                                        >
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 21 21"
@@ -421,13 +424,13 @@
 											>
 										</button>
 									{/if}
-									{#if $config?.oauth?.providers?.github}
-										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-											on:click={() => {
-												window.location.href = `${WEBUI_BASE_URL}/oauth/github/login`;
-											}}
-										>
+                                    {#if $config?.oauth?.providers?.github}
+                                        <button
+                                            class="oauth-button w-full"
+                                            on:click={() => {
+                                                window.location.href = `${WEBUI_BASE_URL}/oauth/github/login`;
+                                            }}
+                                        >
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 24 24"
@@ -441,13 +444,13 @@
 											<span>{$i18n.t('Continue with {{provider}}', { provider: 'GitHub' })}</span>
 										</button>
 									{/if}
-									{#if $config?.oauth?.providers?.oidc}
-										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
-											on:click={() => {
-												window.location.href = `${WEBUI_BASE_URL}/oauth/oidc/login`;
-											}}
-										>
+                                    {#if $config?.oauth?.providers?.oidc}
+                                        <button
+                                            class="oauth-button w-full"
+                                            on:click={() => {
+                                                window.location.href = `${WEBUI_BASE_URL}/oauth/oidc/login`;
+                                            }}
+                                        >
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												fill="none"
@@ -473,25 +476,25 @@
 								</div>
 							{/if}
 
-							{#if $config?.features.enable_ldap && $config?.features.enable_login_form}
-								<div class="mt-2">
-									<button
-										class="flex justify-center items-center text-xs w-full text-center underline"
-										type="button"
-										on:click={() => {
-											if (mode === 'ldap')
-												mode = ($config?.onboarding ?? false) ? 'signup' : 'signin';
-											else mode = 'ldap';
-										}}
-									>
-										<span
-											>{mode === 'ldap'
-												? $i18n.t('Continue with Email')
-												: $i18n.t('Continue with LDAP')}</span
-										>
-									</button>
-								</div>
-							{/if}
+                            {#if $config?.features.enable_ldap && $config?.features.enable_login_form}
+                                <div class="mt-2">
+                                    <button
+                                        class="flex justify-center items-center text-xs w-full toggle-link"
+                                        type="button"
+                                        on:click={() => {
+                                            if (mode === 'ldap')
+                                                mode = ($config?.onboarding ?? false) ? 'signup' : 'signin';
+                                            else mode = 'ldap';
+                                        }}
+                                    >
+                                        <span>
+                                            {mode === 'ldap'
+                                                ? $i18n.t('Continue with Email')
+                                                : $i18n.t('Continue with LDAP')}
+                                        </span>
+                                    </button>
+                                </div>
+                            {/if}
 						</div>
 						{#if $config?.metadata?.login_footer}
 							<div class="max-w-3xl mx-auto">
@@ -501,6 +504,124 @@
 							</div>
 						{/if}
 					</div>
+
+<style>
+  /* Define brand colours and overall page background */
+  #auth-page {
+    --brand-green: #05ff00;
+    --brand-blue: #0013f8;
+    /* Dark futuristic radial gradients blending the two brand colours */
+    background: radial-gradient(circle at 20% 20%, var(--brand-blue), rgba(0, 0, 0, 1) 60%),
+      radial-gradient(circle at 80% 80%, var(--brand-green), rgba(0, 0, 0, 1) 60%);
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    color: #ffffff;
+  }
+
+  /* Subtle glowing accent lines that decorate the background */
+  .accent-line {
+    position: absolute;
+    left: -50%;
+    right: -50%;
+    height: 1px;
+    background: var(--brand-green);
+    opacity: 0.15;
+    transform-origin: center;
+  }
+  .accent-line:nth-of-type(1) {
+    top: 25%;
+    transform: rotate(30deg);
+  }
+  .accent-line:nth-of-type(2) {
+    top: 75%;
+    transform: rotate(-30deg);
+  }
+
+  /* Frosted glass effect card for the auth form */
+  .glass-card {
+    background: rgba(0, 0, 40, 0.7);
+    border: 1px solid rgba(5, 255, 0, 0.4);
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(5, 255, 0, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+  }
+
+  /* Primary action buttons styled with neon effects */
+  .btn-primary {
+    background: var(--brand-green);
+    border-radius: 9999px;
+    padding: 0.75rem;
+    font-weight: 600;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    color: #000;
+  }
+  .btn-primary:hover {
+    background: var(--brand-blue);
+    box-shadow: 0 0 15px var(--brand-blue);
+    color: #ffffff;
+  }
+
+  /* Inputs with subtle outlines and glow on focus */
+  .input-field {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.5rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    box-shadow: 0 0 8px var(--brand-green);
+  }
+
+  /* OAuth and social login buttons */
+  .oauth-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #ffffff;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .oauth-button:hover {
+    background: rgba(0, 19, 248, 0.4);
+    box-shadow: 0 0 10px var(--brand-blue);
+  }
+
+  /* Links used for toggling between sign in/up and LDAP/email */
+  .toggle-link {
+    color: var(--brand-green);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+    text-decoration: underline;
+  }
+  .toggle-link:hover {
+    color: var(--brand-blue);
+  }
+
+  /* Divider for separating OAuth providers */
+  .divider {
+    width: 8rem;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    margin: 1rem 0;
+  }
+</style>
 				{/if}
 			</div>
 		</div>
@@ -508,13 +629,13 @@
 		<div class="fixed m-10 z-50">
 			<div class="flex space-x-2">
 				<div class=" self-center">
-					<img
-						id="logo"
-						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.png"
-						class=" w-6 rounded-full"
-						alt=""
-					/>
+                    <img
+                        id="logo"
+                        crossorigin="anonymous"
+                        src="/441049.png"
+                        class="mx-auto mb-6 w-40"
+                        alt="AI QuintX logo"
+                    />
 				</div>
 			</div>
 		</div>

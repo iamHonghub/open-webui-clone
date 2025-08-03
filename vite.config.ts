@@ -28,5 +28,15 @@ export default defineConfig({
 	},
 	esbuild: {
 		pure: process.env.ENV === 'dev' ? [] : ['console.log', 'console.debug']
-	}
+	},
+  // 👉 Dev‑only proxy: เส้นทาง /static จะถูกส่งต่อไปที่ backend พอร์ต 8080
+  server: {
+    proxy: {
+      '/static': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 });
